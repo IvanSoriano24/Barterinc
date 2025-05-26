@@ -1,8 +1,17 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import styles from './TwoFactorScreen.styles';
 import { Alert } from 'react-native';
-
 
 export default function TwoFactorScreen({ navigation }) {
   const [code, setCode] = useState(['', '', '', '']);
@@ -33,11 +42,13 @@ export default function TwoFactorScreen({ navigation }) {
 
   const getBorderColor = (value, isTouched) => {
     return isTouched
-        ? /^\d$/.test(value) ? '#00bd56' : '#e74c3c'
+        ? /^\d$/.test(value)
+            ? '#00bd56'
+            : '#e74c3c'
         : '#bbb';
   };
 
-  const userRole = 'inversionista'; // cambiar según prueba
+  const userRole = ''; // cambiar según prueba
 
   const handleSubmit = () => {
     const isValid = code.every((digit) => /^\d$/.test(digit));
@@ -53,45 +64,47 @@ export default function TwoFactorScreen({ navigation }) {
     }
   };
 
-
-
   return (
-    <View style={styles.background}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Barterinc</Text>
-        <Text style={styles.subtitle}>Verificación en dos pasos</Text>
-        <Text style={styles.message}>Ingresa el código que enviamos{'\n'}a tu correo electrónico</Text>
-        <Text style={styles.label}>Código</Text>
+      <KeyboardAvoidingView
+          style={styles.background}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={0}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+            <View style={styles.container}>
+              <Text style={styles.title}>Barterinc</Text>
+              <Text style={styles.subtitle}>Verificación en dos pasos</Text>
+              <Text style={styles.message}>
+                Ingresa el código que enviamos{'\n'}a tu correo electrónico
+              </Text>
+              <Text style={styles.label}>Código</Text>
 
-        <View style={styles.codeContainer}>
-          {code.map((value, i) => (
-            <TextInput
-              key={i}
-              ref={(ref) => inputRefs.current[i] = ref}
-              style={[
-                styles.codeInput,
-                { borderColor: getBorderColor(value, touched[i]) }
-              ]}
-              keyboardType="number-pad"
-              maxLength={1}
-              value={value}
-              onChangeText={(text) => handleChange(text, i)}
-              onKeyPress={(e) => handleKeyPress(e, i)}
-            />
-          ))}
-        </View>
+              <View style={styles.codeContainer}>
+                {code.map((value, i) => (
+                    <TextInput
+                        key={i}
+                        ref={(ref) => (inputRefs.current[i] = ref)}
+                        style={[styles.codeInput, { borderColor: getBorderColor(value, touched[i]) }]}
+                        keyboardType="number-pad"
+                        maxLength={1}
+                        value={value}
+                        onChangeText={(text) => handleChange(text, i)}
+                        onKeyPress={(e) => handleKeyPress(e, i)}
+                    />
+                ))}
+              </View>
 
-        <TouchableOpacity
-            style={styles.button}
-            onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>Continuar</Text>
-        </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Continuar</Text>
+              </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.returnText}>Regresar</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Text style={styles.returnText}>Regresar</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
   );
 }

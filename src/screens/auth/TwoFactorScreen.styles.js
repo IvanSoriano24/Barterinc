@@ -73,4 +73,11 @@ export default StyleSheet.create({
     textDecorationLine: 'underline',
     color: '#222',
   },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 1,
+  },
+
 });

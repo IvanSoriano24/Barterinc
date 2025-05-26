@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Icon } from 'react-native-elements';
 import React from 'react';
-import CustomDrawerInvestor from '../screens/investor';
+import CustomDrawerInvestor from '../screens/investor/CustomDrawerInvestor'; // Asegúrate que esta sea la ruta correcta
 
 // Screens (renamed in English)
 import EnterprisesScreen from '../screens/investor/EnterprisesScreen';
@@ -10,73 +10,64 @@ import LegalInfoScreen from '../screens/investor/LegalInfoScreen';
 import ReportsScreen from '../screens/investor/ReportsScreen';
 import FinancialBoxScreen from '../screens/investor/FinancialBoxScreen';
 import AccountScreen from '../screens/investor/AccountScreen';
-import {View} from "react-native";
 
 const Drawer = createDrawerNavigator();
 
 export default function InvestorDrawerNavigator() {
     return (
         <Drawer.Navigator
+            drawerContent={(props) => <CustomDrawerInvestor {...props} />}
             screenOptions={{
-                headerStyle: { backgroundColor: '#0b0f4d' },
+                headerStyle: { backgroundColor: '#111745' },
                 headerTintColor: '#fff',
-                drawerStyle: { backgroundColor: '#0b0f4d' },
+                drawerStyle: { backgroundColor: '#111745' },
                 drawerActiveTintColor: '#fff',
                 drawerInactiveTintColor: '#ccc',
-                drawerLabelStyle: { marginLeft: -20 },
+                drawerLabelStyle: { marginLeft: 0, fontSize: 16 },
             }}
         >
             <Drawer.Screen
-                name="Enterprises"
+                name="Empresas"
                 component={EnterprisesScreen}
                 options={{
                     drawerIcon: ({ color }) => <Icon name="briefcase" type="feather" color={color} />,
                 }}
             />
             <Drawer.Screen
-                name="Investment History"
+                name="Historial de Inversiones"
                 component={InvestmentHistoryScreen}
                 options={{
                     drawerIcon: ({ color }) => <Icon name="bar-chart" type="feather" color={color} />,
                 }}
             />
             <Drawer.Screen
-                name="Legal Information"
+                name="Información Legal"
                 component={LegalInfoScreen}
                 options={{
                     drawerIcon: ({ color }) => <Icon name="file-text" type="feather" color={color} />,
                 }}
             />
             <Drawer.Screen
-                name="Reports"
+                name="Reportes"
                 component={ReportsScreen}
                 options={{
                     drawerIcon: ({ color }) => <Icon name="clipboard" type="feather" color={color} />,
                 }}
             />
             <Drawer.Screen
-                name="Financial Box"
+                name="Caja Financiera"
                 component={FinancialBoxScreen}
                 options={{
                     drawerIcon: ({ color }) => <Icon name="dollar-sign" type="feather" color={color} />,
                 }}
             />
             <Drawer.Screen
-                name="Account"
+                name="Cuenta"
                 component={AccountScreen}
                 options={{
                     drawerIcon: ({ color }) => <Icon name="user" type="feather" color={color} />,
                 }}
             />
-            drawerContent={(props) => <CustomDrawerInvestor {...props} />}
-            screenOptions={{
-            headerStyle: { backgroundColor: '#0b0f4d' },
-            headerTintColor: '#fff',
-            drawerStyle: { backgroundColor: '#0b0f4d' },
-            drawerActiveTintColor: '#fff',
-            drawerInactiveTintColor: '#ccc',
-            drawerLabelStyle: { marginLeft: -20 },
-        }}
         </Drawer.Navigator>
     );
 }
