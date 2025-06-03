@@ -4,6 +4,9 @@ const express = require('express');
 const cors = require('cors');
 
 const userRoutes = require('./routes/user.routes');
+//const documentsRoutes = require('./routes/documents.routes');
+const quoteRoutes = require('./routes/quote.routes');
+
 
 const app = express();
 app.use(cors());
@@ -11,6 +14,8 @@ app.use(express.json());
 
 // Rutas principales
 app.use('/api/users', userRoutes);
+app.use('/api/quote', quoteRoutes);
+//app.use('/api/documents', documentsRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
