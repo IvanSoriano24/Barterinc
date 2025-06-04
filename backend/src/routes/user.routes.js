@@ -5,40 +5,42 @@ const { verifyToken } = require('../middlewares/auth.middleware');
 const { verifyAdmin } = require('../middlewares/auth.middleware');
 
 
-// Rutas Cliente
-// Registrar usuario cliente
+// RUTAS PÚBLICAS (Clientes)
+
+// Ruta para registrar un nuevo usuario (cliente, lender o investor)
 router.post('/register', userController.registerUser);
 
-// Iniciar sesión
+// Ruta para iniciar sesión (genera token si el usuario está aprobado)
 router.post('/login', userController.loginUser);
 
-// Obtener perfil usuario
+// Ruta para obtener el perfil del usuario autenticado
+// Requiere un token válido en el encabezado
 router.get('/profile', verifyToken, userController.getProfile);
 
-// Aprobar Usuario
-//router.put('/approve/:uid', verifyToken, userController.approveUser);
 
+// RUTAS ADMINISTRATIVAS (Requiere rol admin)
 
-// Rutas ADMIN
-// Obtener todos los usuarios
+// Ruta para obtener todos los usuarios registrados
 router.get('/', verifyAdmin, userController.getAllUsers);
 
-// Obtener usuarios por status
+// Ruta para obtener usuarios filtrados por estado (pending, active, rejected, etc.)
 router.get('/status/:status', verifyAdmin, userController.getUsersByStatus);
 
-// Obtener usuarios por rol
+// Ruta para obtener usuarios filtrados por rol (admin, lender, investor, etc.)
 router.get('/by-role/:role', verifyAdmin, userController.getUsersByRole);
 
-// Aprobar usuario
+// Ruta para aprobar un usuario (cambia su estado a "active")
 router.put('/:uid/approve', verifyAdmin, userController.approveUser);
 
-// Rechazar usuario
+// Ruta para rechazar un usuario (cambia su estado a "rejected")
 router.put('/:uid/reject', verifyAdmin, userController.rejectUser);
 
-// Suspender usuario
+// Ruta para suspender un usuario (cambia su estado a "suspended")
 router.put('/:uid/suspend', verifyAdmin, userController.suspendUser);
 
-// Eliminar usuario
+// Ruta para eliminar un usuario (cambia su estado a "deleted" - eliminación lógica)
 router.put('/:uid/delete', verifyAdmin, userController.deleteUser);
 
+
+// Exporta las rutas para usarlas en la app principal
 module.exports = router;
