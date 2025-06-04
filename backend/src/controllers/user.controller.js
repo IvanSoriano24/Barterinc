@@ -10,7 +10,7 @@ exports.registerUser = async (req, res) => {
             role,
             status: 'pending'
         });
-        res.status(201).send('User registered and pending approval');
+        res.status(201).send('Usuario registrado y pendiente de aprobación');
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -20,11 +20,11 @@ exports.loginUser = async (req, res) => {
     const { email } = req.body;
     try {
         const snapshot = await firebase.db.collection('users').where('email', '==', email).get();
-        if (snapshot.empty) return res.status(404).send('User not found');
+        if (snapshot.empty) return res.status(404).send('Usuario no encontrado');
 
         const userDoc = snapshot.docs[0];
         const data = userDoc.data();
-        if (data.status !== 'active') return res.status(403).send('User not approved yet');
+        if (data.status !== 'active') return res.status(403).send('Usuario no aprobado');
 
         const token = jwt.sign({ uid: userDoc.id, role: data.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
         res.status(200).json({ token });
@@ -46,7 +46,7 @@ exports.approveUser = async (req, res) => {
     const { uid } = req.params;
     try {
         await firebase.db.collection('users').doc(uid).update({ status: 'active' });
-        res.send('User approved successfully');
+        res.send('Usuario aprobado');
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -88,7 +88,7 @@ exports.rejectUser = async (req, res) => {
     const { uid } = req.params;
     try {
         await firebase.db.collection('users').doc(uid).update({ status: 'rejected' });
-        res.send('User rejected');
+        res.send('Usuario rechazado');
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -98,7 +98,7 @@ exports.suspendUser = async (req, res) => {
     const { uid } = req.params;
     try {
         await firebase.db.collection('users').doc(uid).update({ status: 'suspended' });
-        res.send('User suspended');
+        res.send('Usuario suspendido');
     } catch (err) {
         res.status(500).send(err.message);
     }
@@ -108,7 +108,7 @@ exports.deleteUser = async (req, res) => {
     const { uid } = req.params;
     try {
         await firebase.db.collection('users').doc(uid).update({ status: 'deleted' });
-        res.send('User deleted');
+        res.send('Usuario eliminado');
     } catch (err) {
         res.status(500).send(err.message);
     }
